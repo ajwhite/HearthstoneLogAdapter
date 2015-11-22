@@ -8,13 +8,13 @@ class GameEventManager {
   opponentCardPlayed(cardId) {
     var card = Cards.getById(cardId);
     if (card) {
-      this.adapter.emit(Events.OPPONENT_CARD, card);
+      this.adapter.emit(Events.OPPONENT_CARD, Object.assign({}, card));
     }
   }
   playerCardDrawn(cardId) {
     var card = Cards.getById(cardId);
     if (card) {
-      this.adapter.emit(Events.PLAYER_CARD, card);
+      this.adapter.emit(Events.PLAYER_CARD, Object.assign({}, card));
     }
   }
   gameStarted() {

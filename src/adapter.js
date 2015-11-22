@@ -4,7 +4,9 @@ import child_process from 'child_process';
 import EventEmitter from 'events';
 import fs from 'fs';
 import path from 'path';
+import GameEventManager from './game-event-manager';
 import Handlers from './handlers';
+import Events from './events';
 
 var spawn = child_process.spawn;
 var readDir = Promise.promisify(fs.readdir);
@@ -33,5 +35,7 @@ class LogAdapter extends EventEmitter {
     });
   }
 }
+
+LogAdapter.Events = Events;
 
 export default LogAdapter;
