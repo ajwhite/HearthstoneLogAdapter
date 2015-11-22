@@ -8,7 +8,6 @@ import Handlers from './handlers';
 
 var spawn = child_process.spawn;
 var readDir = Promise.promisify(fs.readdir);
-// fs = Promise.promisifyAll(fs);
 
 class LogAdapter extends EventEmitter {
   constructor(logDirectory) {
