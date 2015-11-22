@@ -33,17 +33,16 @@ describe('Handlers: Zone', () => {
       zoneHandler.handle('2015-11-21 02:08:50.031: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Haunted Creeper id=85 zone=HAND zonePos=0 cardId=FP1_002 player=2] to FRIENDLY HAND');
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_002');
     });
-    return;
     it ('should detect when an opponent plays a card', function () {
       zoneHandler.handle('2015-11-21 01:40:11.198: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Silverback Patriarch id=61 zone=PLAY zonePos=5 cardId=CS2_127 player=2] to OPPOSING PLAY');
-      expect(Game.opponentCardDiscovered).to.have.been.calledWith('CS2_127');
+      expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_127');
 
       zoneHandler.handle('2015-11-21 01:59:34.165: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Chillwind Yeti id=45 zone=PLAY zonePos=5 cardId=CS2_182 player=2] to OPPOSING PLAY');
-      expect(Game.opponentCardDiscovered).to.have.been.calledWith('CS2_182')
+      expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_182')
     });
     it ('should ignore opponent hero powers', function () {
       zoneHandler.handle('2015-11-21 02:11:10.322: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Lesser Heal id=67 zone=PLAY zonePos=0 cardId=CS1h_001 player=2] to OPPOSING PLAY (Hero Power)');
-      expect(Game.opponentCardDiscovered).not.to.have.been.called;
+      expect(gameEventManager.opponentCardPlayed).not.to.have.been.called;
     });
   });
 });

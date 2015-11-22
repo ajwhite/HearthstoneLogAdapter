@@ -11,6 +11,12 @@ class ZoneHandler extends Handler {
         handle: (cardId) => {
           gameEventManager.playerCardDrawn(cardId);
         }
+      },
+      {
+        pattern: /TRANSITIONING card.* id=\d+.*cardId=(\w+).*to OPPOSING PLAY$/i,
+        handle: (cardId) => {
+          gameEventManager.opponentCardPlayed(cardId);
+        }
       }
     ];
     super(NAME, filters);
