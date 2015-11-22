@@ -8,7 +8,11 @@ require('babel-core/register');
 
 gulp.task('test', function () {
   gulp.src('test/spec/**/*.js')
-  // .pipe(babel())
+  .pipe(mocha({reporter: 'spec', growl: true}));
+});
+
+gulp.task('watchtest', function () {
+  gulp.src('test/spec/**/*.js')
   .pipe(plumber({
     errorHandler: function (err) {
       notify.onError({
@@ -21,6 +25,6 @@ gulp.task('test', function () {
   .pipe(mocha({reporter: 'spec', growl: true}));
 });
 
-gulp.task('watch', ['test'], function () {
-  gulp.watch(['src/**/*.js', 'test/**/*.js'], ['test']);
+gulp.task('watch', ['watchtest'], function () {
+  gulp.watch(['src/**/*.js', 'test/**/*.js'], ['watchtest']);
 });
