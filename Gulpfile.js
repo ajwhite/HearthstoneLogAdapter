@@ -1,19 +1,21 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     notify = require('gulp-notify'),
-    mocha = require('gulp-mocha');
+    mocha = require('gulp-mocha'),
+    babel = require('gulp-babel');
 
 gulp.task('test', function () {
   gulp.src('test/spec/**/*.js')
-  .pipe(plumber({
-    errorHandler: function (err) {
-      notify.onError({
-        title: 'Unit Test',
-        message: '<%= error.message %>'
-      })(err);
-      this.emit('end');
-    }
-  }))
+  .pipe(babel())
+  // .pipe(plumber({
+  //   errorHandler: function (err) {
+  //     notify.onError({
+  //       title: 'Unit Test',
+  //       message: '<%= error.message %>'
+  //     })(err);
+  //     this.emit('end');
+  //   }
+  // }))
   .pipe(mocha({reporter: 'spec', growl: true}));
 });
 
