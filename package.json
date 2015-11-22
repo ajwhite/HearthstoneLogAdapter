@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ajwhite/HearthstoneLogAdapter#readme",
   "devDependencies": {
     "babel": "^6.1.18",
+    "babel-core": "^6.2.1",
     "chai": "^3.4.1",
     "gulp": "^3.9.0",
     "gulp-jscs": "^3.0.2",
