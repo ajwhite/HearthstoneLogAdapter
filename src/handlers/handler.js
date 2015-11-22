@@ -1,8 +1,7 @@
 'use strict';
 
 class Handler {
-  constructor(adapter, name, filters) {
-    this.adapter = adapter;
+  constructor(name, filters) {
     this.name = name;
     this.filters = filters;
     this.matcher = new RegExp(`(\\[${this.name}\\])`, 'g');
@@ -17,7 +16,7 @@ class Handler {
       return filter.pattern.test(line);
     }).forEach(filter => {
       var matches = filter.pattern.exec(line);
-      this.adapter.emit.apply(this.adapter, [filter.eventName].concat(matches.slice(1, matches.length)));
+      filter.handle.apply(filter.handle, matches.slice(1, matches.length));
     });
   }
 }

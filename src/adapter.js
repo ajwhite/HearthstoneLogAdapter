@@ -6,7 +6,6 @@ import fs from 'fs';
 import path from 'path';
 import Handlers from './handlers';
 
-
 var spawn = child_process.spawn;
 var readDir = Promise.promisify(fs.readdir);
 // fs = Promise.promisifyAll(fs);
@@ -15,7 +14,8 @@ class LogAdapter extends EventEmitter {
   constructor(logDirectory) {
     super();
     this.logDirectory = logDirectory;
-    this.handlers = new Handlers();
+    this.gameEventManager = new GameEventManager(this);
+    this.handlers = new Handlers(this.gameEventManager);
     this.stream = null;
   }
   start() {

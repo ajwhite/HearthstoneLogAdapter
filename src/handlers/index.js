@@ -2,9 +2,9 @@
 import PowerHandler from './power';
 
 class Handlers {
-  constructor(adapter) {
+  constructor(gameEventManager) {
     this.handlers = [
-      new PowerHandler(adapter)
+      new PowerHandler(gameEventManager)
     ];
   }
   handle(line) {
