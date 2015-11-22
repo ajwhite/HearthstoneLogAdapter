@@ -1,6 +1,5 @@
 'use strict';
 import Handler from './handler';
-import EVENTS from '../events';
 
 const NAME = 'Power';
 
@@ -21,7 +20,6 @@ class PowerHandler extends Handler {
       }
     ];
     super(NAME, filters);
-    this.gameEventManager = gameEventManager;
   }
 }
 

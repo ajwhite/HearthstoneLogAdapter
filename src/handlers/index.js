@@ -1,10 +1,12 @@
 'use strict';
 import PowerHandler from './power';
+import ZoneHandler from './zone';
 
 class Handlers {
   constructor(gameEventManager) {
     this.handlers = [
-      new PowerHandler(gameEventManager)
+      new PowerHandler(gameEventManager),
+      new ZoneHandler(gameEventManager)
     ];
   }
   handle(line) {

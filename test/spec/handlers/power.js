@@ -6,7 +6,7 @@ import GameEventManager from '../../../src/game-event-manager';
 import PowerHandler from '../../../src/handlers/power';
 import EVENTS from '../../../src/events';
 
-describe('Logs: Power', () => {
+describe('Handlers: Power', () => {
   var {
     expect,
     assert
