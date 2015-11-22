@@ -9,7 +9,7 @@ const FILTERS = [
     eventName: EVENTS.GAME_STARTED
   },
   {
-    pattern: /ACTION_START.*Entity=.*id=(\d+).*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
+    pattern: /ACTION_START.*Entity=.*id=\d+.*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
     eventName: EVENTS.OPPONENT_CARD
   }
 ];

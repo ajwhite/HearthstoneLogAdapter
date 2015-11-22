@@ -17,7 +17,7 @@ class Handler {
       return filter.pattern.test(line);
     }).forEach(filter => {
       var matches = filter.pattern.exec(line);
-      this.adapter.emit(filter.eventName, matches.slice(1, matches.length));
+      this.adapter.emit.apply(this.adapter, [filter.eventName].concat(matches.slice(1, matches.length)));
     });
   }
 }
