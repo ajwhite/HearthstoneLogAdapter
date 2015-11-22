@@ -1,6 +1,6 @@
 'use strict';
 import Handler from './handler';
-import Events from '../events';
+import EVENTS from '../events';
 
 const NAME = 'Power';
 const FILTERS = [
@@ -16,7 +16,7 @@ const FILTERS = [
 
 class PowerHandler extends Handler {
   constructor (adapter) {
-    super(adapater, NAME, FILTERS);
+    super(adapter, NAME, FILTERS);
   }
 }
 

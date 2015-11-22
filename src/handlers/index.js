@@ -1,3 +1,4 @@
+'use strict';
 import PowerHandler from './power';
 
 class Handlers {
@@ -10,7 +11,7 @@ class Handlers {
     this.handlers.filter(handler => {
       return handler.matches(line);
     }).forEach(handler => {
-      return handler.handle.(line);
+      return handler.handle(line);
     });
   }
 }

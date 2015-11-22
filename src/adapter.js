@@ -8,16 +8,18 @@ import Handlers from './handlers';
 
 
 var spawn = child_process.spawn;
-fs = Promise.promisifyAll(fs);
+var readDir = Promise.promisify(fs.readdir);
+// fs = Promise.promisifyAll(fs);
 
 class LogAdapter extends EventEmitter {
   constructor(logDirectory) {
+    super();
     this.logDirectory = logDirectory;
     this.handlers = new Handlers();
     this.stream = null;
   }
   start() {
-    return fs.readdirAsync(this.logDirectory).then(files => {
+    return readDir(this.logDirectory).then(files => {
       var file = files.pop();
       var child = spawn('tail', ['-f', path.join(this.logDirectory, file)]);
       return child.stdout;

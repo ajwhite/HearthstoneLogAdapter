@@ -13,11 +13,11 @@ class Handler {
   }
 
   handle(line) {
-    return this.filters.filter((filter) => {
+    return this.filters.filter(filter => {
       return filter.pattern.test(line);
-    }).forEach((filter) => {
+    }).forEach(filter => {
       var matches = filter.pattern.exec(line);
-      adapter.emit(filter.eventName, matches.slice(1, matches.length));
+      this.adapter.emit(filter.eventName, matches.slice(1, matches.length));
     });
   }
 }
