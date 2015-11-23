@@ -1,4 +1,5 @@
 'use strict';
+import Zone from '../constants/zone';
 
 class Handler {
   constructor(name, filters) {

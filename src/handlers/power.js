@@ -1,6 +1,7 @@
 'use strict';
 import Handler from './handler';
 import Entity from '../entity';
+import TagChangeHandler from './tag-change';
 
 const NAME = 'Power';
 
@@ -36,7 +37,8 @@ var isEntity = (entityObject) => {
 
 class PowerHandler extends Handler {
   constructor (gameEventManager) {
-    var filters = [
+    super(NAME);
+    this.filters = [
       {
         pattern: /(CREATE_GAME)/i,
         handle: () => {
@@ -60,24 +62,27 @@ class PowerHandler extends Handler {
         handle: this.onTagChange.bind(this)
       },
       {
-        pattern: /ACTION_START.*Entity=.*id=\d+.*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
-        handle: (cardId) => {
-          gameEventManager.opponentCardPlayed(cardId);
-        }
-      },
-      {
         pattern: /FULL_ENTITY - Creating ID=(\d+) CardID=(\w*)/i,
-        handle: (id, cardId) => {
-          gameEventManager.addEntityById(id);
-        }
+        handle: this.onFullEntity.bind(this)
       },
       {
         pattern: /SHOW_ENTITY - Updating Entity=(.+) CardID=(\w*)/i,
         handle: this.onShowEntity.bind(this)
+      },
+      {
+        pattern: /tag=(\w+) value=(\w+)/,
+        handle: this.onCurrentEntityTagChange.bind(this)
+      },
+      {
+        pattern: /ACTION_START.*Entity=.*id=\d+.*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
+        handle: (cardId) => {
+          gameEventManager.opponentCardPlayed(cardId);
+        }
       }
     ];
-    super(NAME, filters);
+
     this.gameEventManager = gameEventManager;
+    this.tagChangeHandler = new TagChangeHandler(gameEventManager);
   }
   onGameEntity(id) {
     this.gameEventManager.safeAddEntity(id);
@@ -91,16 +96,29 @@ class PowerHandler extends Handler {
     console.log('playername', name, player);
   }
   onTagChange(rawEntity, tag, value) {
-
+    var parsedEntity = parseEntity(rawEntity);
+    if (parsedEntity && parsedEntity.id) {
+      this.tagChangeHandler.tagChanged(parsedEntity.id, tag, value);
+    }
+  }
+  onCurrentEntityTagChange(tag, value) {
+    if (this.currentEntity) {
+      this.tagChangeHandler.tagChanged(this.currentEntity, tag, value);
+    }
+  }
+  onFullEntity(id, cardId) {
+    var entity = this.gameEventManager.safeAddEntity(id);
+    entity.cardId = cardId;
+    this.currentEntity = entity.id;
   }
   onShowEntity(rawEntity, cardId) {
     var entity = parseEntity(rawEntity);
     if (entity && entity.id) {
-      if (!gameEventManager.hasEntity(entity.id)) {
-        gameEventManager.addEntity(new Entity(entity));
+      if (!this.gameEventManager.hasEntity(entity.id)) {
+        this.gameEventManager.addEntity(new Entity(entity));
       }
-      gameEventManager.entities[entity.id].card_id = cardId;
-      console.log('updated entity', gameEventManager.entities[entity.id]);
+      this.gameEventManager.entities[entity.id].card_id = cardId;
+      console.log('updated entity', this.gameEventManager.entities[entity.id]);
     }
   }
 }
