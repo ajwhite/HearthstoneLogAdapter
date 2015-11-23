@@ -21,7 +21,7 @@ class TagChangeHandler {
     }
 
     if (tag === GameTag.ZONE) {
-      // console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
+      console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
     }
 
 
