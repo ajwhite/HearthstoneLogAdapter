@@ -2,6 +2,7 @@
 import Handler from './handler';
 import Entity from '../entity';
 import TagChangeHandler from './tag-change';
+import GameTag from '../constants/game-tag';
 
 const NAME = 'Power';
 
@@ -14,8 +15,8 @@ var parseEntity = (rawEntity) => {
   entity.id = /id=(\d+)/.exec(rawEntity);
   entity.name = /name=(\w+)/i.exec(rawEntity);
   entity.zone = /zone=(\w+)/i.exec(rawEntity);
-  entity.zonePos = /zonePos=(\d+)/.exec(rawEntity);
-  entity.cardId = /cardId=(\w+)/.exec(rawEntity);
+  entity.zone_pos = /zonePos=(\d+)/.exec(rawEntity);
+  entity.card_id = /cardId=(\w+)/.exec(rawEntity);
   entity.player = /player=(\d+)/.exec(rawEntity);
   entity.type = /type=(\w+)/.exec(rawEntity);
 
@@ -102,23 +103,35 @@ class PowerHandler extends Handler {
     }
   }
   onCurrentEntityTagChange(tag, value) {
+    // console.log('current entity tag changed', this.currentEntity, tag, value);
+    // console.log('current entity tag change', this.currentEntity, tag, value);
     if (this.currentEntity) {
+      // console.log('triggering tag change');
       this.tagChangeHandler.tagChanged(this.currentEntity, tag, value);
     }
+    // console.log('');
   }
   onFullEntity(id, cardId) {
     var entity = this.gameEventManager.safeAddEntity(id);
-    entity.cardId = cardId;
+    entity.card_id = cardId;
     this.currentEntity = entity.id;
   }
   onShowEntity(rawEntity, cardId) {
     var entity = parseEntity(rawEntity);
+    // console.log('showEntity', rawEntity);
     if (entity && entity.id) {
       if (!this.gameEventManager.hasEntity(entity.id)) {
         this.gameEventManager.addEntity(new Entity(entity));
       }
       this.gameEventManager.entities[entity.id].card_id = cardId;
-      console.log('updated entity', this.gameEventManager.entities[entity.id]);
+      if (entity.zone){
+        this.gameEventManager.entities[entity.id].tags[GameTag.ZONE] = entity.zone;
+        // console.log('updating card zone', entity.zone);
+      }
+      // console.log('setting current entity', entity.id);
+      // console.log('');
+      this.currentEntity = entity.id;
+      // console.log('updated entity', this.gameEventManager.entities[entity.id]);
     }
   }
 }

@@ -13,12 +13,13 @@ class Handler {
   }
 
   handle(line) {
-    return this.filters.filter(filter => {
+    var filter = this.filters.find(filter => {
       return filter.pattern.test(line);
-    }).forEach(filter => {
-      var matches = filter.pattern.exec(line);
-      filter.handle.apply(filter.handle, matches.slice(1, matches.length));
     });
+    if (filter) {
+      let matches = filter.pattern.exec(line);
+      filter.handle.apply(filter.handle, matches.slice(1, matches.length));
+    }
   }
 }
 
