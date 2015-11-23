@@ -108,13 +108,9 @@ class PowerHandler extends Handler {
     }
   }
   onCurrentEntityTagChange(tag, value) {
-    // console.log('current entity tag changed', this.currentEntity, tag, value);
-    // console.log('current entity tag change', this.currentEntity, tag, value);
     if (this.currentEntity) {
-      // console.log('triggering tag change');
       this.tagChangeHandler.tagChanged(this.currentEntity, tag, value);
     }
-    // console.log('');
   }
   onFullEntity(id, cardId) {
     var entity = this.gameEventManager.safeAddEntity(id);
@@ -123,7 +119,6 @@ class PowerHandler extends Handler {
   }
   onShowEntity(rawEntity, cardId) {
     var entity = parseEntity(rawEntity);
-    // console.log('showEntity', rawEntity);
     if (entity && entity.id) {
       if (!(entity.id in this.entitiesShown)) {
         if (!this.gameEventManager.hasEntity(entity.id)) {
@@ -132,18 +127,14 @@ class PowerHandler extends Handler {
 
         if (entity.zone){
           this.gameEventManager.entities[entity.id].updateTag(GameTag.ZONE, entity.zone);
-          // console.log('updating card zone', entity.zone);
         }
         if (entity.player) {
           this.gameEventManager.entities[entity.id].updateTag(GameTag.CONTROLLER, entity.player);
         }
         this.entitiesShown[entity.id] = true;
       }
-      // console.log('setting current entity', entity.id);
-      // console.log('');
       this.gameEventManager.entities[entity.id].card_id = cardId;
       this.currentEntity = entity.id;
-      // console.log('updated entity', this.gameEventManager.entities[entity.id]);
     }
   }
 }
