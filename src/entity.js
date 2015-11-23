@@ -11,10 +11,10 @@ class Entity {
     this.tags = {};
   }
   isOwnedByPlayer() {
-    return this.player === 2;
+    return this.tags[GameTag.CONTROLLER] === 1;
   }
   isOwnedByOpponent() {
-    return this.player === 1;
+    return this.tags[GameTag.CONTROLLER] === 2;
   }
   updateTag(tag, value) {
     this.tags[tag] = value;

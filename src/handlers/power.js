@@ -22,7 +22,11 @@ var parseEntity = (rawEntity) => {
 
   Object.keys(entity).forEach(function (key) {
     if (entity[key]) {
-      entity[key] = entity[key][1];
+      let value = entity[key][1];
+      if (!isNaN(value)) {
+        value = parseInt(value);
+      }
+      entity[key] = value;
     }
   });
   return entity;
@@ -77,7 +81,7 @@ class PowerHandler extends Handler {
       {
         pattern: /ACTION_START.*Entity=.*id=\d+.*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
         handle: (cardId) => {
-          gameEventManager.opponentCardPlayed(cardId);
+          // gameEventManager.opponentCardPlayed(cardId);
         }
       }
     ];
@@ -120,13 +124,17 @@ class PowerHandler extends Handler {
     var entity = parseEntity(rawEntity);
     // console.log('showEntity', rawEntity);
     if (entity && entity.id) {
+      console.log('onShowEntityt', rawEntity, cardId);
       if (!this.gameEventManager.hasEntity(entity.id)) {
         this.gameEventManager.addEntity(new Entity(entity));
       }
       this.gameEventManager.entities[entity.id].card_id = cardId;
       if (entity.zone){
-        this.gameEventManager.entities[entity.id].tags[GameTag.ZONE] = entity.zone;
+        this.gameEventManager.entities[entity.id].updateTag(GameTag.ZONE, entity.zone);
         // console.log('updating card zone', entity.zone);
+      }
+      if (entity.player) {
+        this.gameEventManager.entities[entity.id].updateTag(GameTag.CONTROLLER, entity.player);
       }
       // console.log('setting current entity', entity.id);
       // console.log('');
