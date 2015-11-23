@@ -45,6 +45,11 @@ class GameEventManager {
   hasEntity(id) {
     return !!this.entities[id];
   }
+  safeAddEntity(id) {
+    if (!this.entities[id]) {
+      this.entities[id] = new Entity(id);
+    }
+  }
 }
 
 export default GameEventManager;

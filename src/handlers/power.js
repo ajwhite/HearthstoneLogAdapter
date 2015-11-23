@@ -44,6 +44,22 @@ class PowerHandler extends Handler {
         }
       },
       {
+        pattern: /GameEntity EntityID=(\d+)/,
+        handle: this.onGameEntity.bind(this)
+      },
+      {
+        pattern: /Player EntityID=(\d+) PlayerID=(\d+) GameAccountId=(.+)/,
+        handle: this.onGameEntity.bind(this)
+      },
+      {
+        pattern: /TAG_CHANGE Entity=([\w\s]+\w) tag=PLAYER_ID value=(\d)/,
+        handle: this.onPlayerName.bind(this)
+      },
+      {
+        pattern: /TAG_CHANGE Entity=(.+) tag=(\w+) value=(\w+)/,
+        handle: this.onTagChange.bind(this)
+      },
+      {
         pattern: /ACTION_START.*Entity=.*id=\d+.*cardId=(\w+).*player=2.*BlockType=POWER.*Target=[^\d].*/i,
         handle: (cardId) => {
           gameEventManager.opponentCardPlayed(cardId);
@@ -57,19 +73,35 @@ class PowerHandler extends Handler {
       },
       {
         pattern: /SHOW_ENTITY - Updating Entity=(.+) CardID=(\w*)/i,
-        handle: (rawEntity, cardId) => {
-          var entity = parseEntity(rawEntity);
-          if (entity && entity.id) {
-            if (!gameEventManager.hasEntity(entity.id)) {
-              gameEventManager.addEntity(new Entity(entity));
-            }
-            gameEventManager.entities[entity.id].card_id = cardId;
-            console.log('updated entity', gameEventManager.entities[entity.id]);
-          }
-        }
+        handle: this.onShowEntity.bind(this)
       }
     ];
     super(NAME, filters);
+    this.gameEventManager = gameEventManager;
+  }
+  onGameEntity(id) {
+    this.gameEventManager.safeAddEntity(id);
+    this.currentEntity = id;
+  }
+  onPlayerEntity(id) {
+    this.gameEventManager.safeAddEntity(id);
+    this.currentEntity = id;
+  }
+  onPlayerName(name, player) {
+    console.log('playername', name, player);
+  }
+  onTagChange(rawEntity, tag, value) {
+
+  }
+  onShowEntity(rawEntity, cardId) {
+    var entity = parseEntity(rawEntity);
+    if (entity && entity.id) {
+      if (!gameEventManager.hasEntity(entity.id)) {
+        gameEventManager.addEntity(new Entity(entity));
+      }
+      gameEventManager.entities[entity.id].card_id = cardId;
+      console.log('updated entity', gameEventManager.entities[entity.id]);
+    }
   }
 }
 
