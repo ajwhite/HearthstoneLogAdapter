@@ -1,9 +1,11 @@
 import Events from './events';
 import Cards from './cards';
+import Entity from './entity';
 
 class GameEventManager {
   constructor(adapter) {
     this.adapter = adapter;
+    this.entities = [];
   }
   opponentCardPlayed(cardId) {
     var card = Cards.getById(cardId);
@@ -21,7 +23,7 @@ class GameEventManager {
     this.adapter.emit(Events.GAME_STARTED);
   }
   playerHero(cardId) {
-    var card = Cards.getbyId(cardId);
+    var card = Cards.getById(cardId);
     if (card) {
       this.adapter.emit(Events.PLAYER_HERO, Object.assign({}, card));
     }
@@ -31,6 +33,17 @@ class GameEventManager {
     if (card) {
       this.adapter.emit(Events.OPPONENT_HERO, Object.assign({}, card));
     }
+  }
+  addEntityById(id) {
+    this.entities[id] = new Entity(id);
+    console.log('adding entity ID', id);
+  }
+  addEntity(entity) {
+    this.entities[entity.id] = entity;
+    console.log('adding entity object', entity);
+  }
+  hasEntity(id) {
+    return !!this.entities[id];
   }
 }
 
