@@ -7,6 +7,29 @@ import sinonChai from 'sinon-chai';
 import GameEventManager from '../../../src/game-event-manager';
 import Handlers from '../../../src/handlers';
 
+/**
+ * Game 1 Scenario
+ * 1. Mulligan
+ *  - FP1_002
+ *  - EX1_319
+ *  - LOE_029
+ *  - FP1_002
+ * 2. Take all cards from Mulligan
+ * 3. Receive Coin
+ * 4. Opponent plays card
+ *  - CS2_189 - Battlecry, 1 damage to Player Hero
+ * 5. Player draws cards
+ *  - FP1_007
+ * 6. Player plays card
+ *  - EX1_319 - Battlecry, 3 damage to Player Hero
+ * 7. Opponent plays card
+ *  - CS2_121 - Battlecry, taunt self
+ * 8. Opponent attack hero with minion
+ *  - CS2_189
+ * 9. Player draws card
+ *  - LOE_023
+ *
+ */
 describe('E2E Test - Game 1', () => {
   var expect = chai.expect;
   var gameEventManager;
