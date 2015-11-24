@@ -20,6 +20,15 @@ describe('Handlers: Zone', () => {
   });
 
   describe('event handlers', function () {
+    it ('should detect the player hero', function () {
+      zoneHandler.handle("2015-11-21 23:14:29.313: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Gul'dan id=64 zone=PLAY zonePos=0 cardId=HERO_07 player=1] to FRIENDLY PLAY (Hero)");
+      expect(gameEventManager.playerHero).to.have.been.calledWith('HERO_07');
+    });
+    it ('should detect the enemy hero', function () {
+      zoneHandler.handle("2015-11-21 23:14:29.338: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Anduin Wrynn id=66 zone=PLAY zonePos=0 cardId=HERO_09 player=2] to OPPOSING PLAY (Hero)");
+      expect(gameEventManager.opponentHero).to.have.been.calledWith('HERO_09');
+    });
+    return;
     it ('should detect a card added to the hand', function () {
       zoneHandler.handle("2015-11-21 00:55:27.503: [Zone] ZoneChangeList.ProcessChanges() - TRANSITIONING card [name=Power Overwhelming id=56 zone=HAND zonePos=0 cardId=EX1_316 player=2] to FRIENDLY HAND");
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_316');
