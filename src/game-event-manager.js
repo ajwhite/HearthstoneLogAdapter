@@ -1,11 +1,13 @@
 import Events from './events';
 import Cards from './cards';
 import Entity from './entity';
+import GameTag from './constants/game-tag';
+import Mulligan from './constants/mulligan';
 
 class GameEventManager {
   constructor(adapter) {
     this.adapter = adapter;
-    this.entities = [];
+    this.entities = {};
   }
   opponentCardPlayed(cardId) {
     var card = Cards.getById(cardId);
@@ -55,6 +57,31 @@ class GameEventManager {
       this.entities[id] = new Entity(id);
     }
     return this.entities[id];
+  }
+  getPlayerEntity() {
+    return Object.keys(this.entities).map(key => {
+      return this.entities[key];
+    }).find(entity => {
+      return entity.getTag(GameTag.PLAYER_ID) === 1;
+    });
+  }
+  getOpponentEntity() {
+    return Object.keys(this.entities).map(key => {
+      return this.entities[key];
+    }).find(entity=> {
+      return entity.getTag(GameTag.PLAYER_ID) === 2;
+    });
+  }
+  isMulliganDone() {
+    var player = this.getPlayerEntity();
+    var opponent = this.getOpponentEntity();
+
+    if (!player || !opponent) {
+      return false;
+    }
+
+    return player.getTag(GameTag.MULLIGAN_STATE) === Mulligan.DONE &&
+           opponent.getTag(GameTag.MULLIGAN_STATE) == Mulligan.DONE;
   }
 }
 

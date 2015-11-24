@@ -5,9 +5,11 @@ import Zone from '../constants/zone';
 class TagChangeHandler {
   constructor(gameEventManager) {
     this.gameEventManager = gameEventManager;
+    this.waitController = null;
   }
-  tagChanged (id, rawTag, rawValue) {
+  tagChanged (id, rawTag, rawValue, recurse) {
     var previousZone;
+    var controller;
     var entity = this.gameEventManager.getEntity(id);
     var tag = GameTag[rawTag];
     var value = parseValue(rawValue);
@@ -23,12 +25,31 @@ class TagChangeHandler {
     if (tag === GameTag.ZONE) {
       // console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
     }
+    if (tag === 'MULLIGAN_STATE') {
+      console.log('mulligan state changed', value);
+    }
 
 
     previousZone = entity.getZone();
     entity.updateTag(tag, value);
+    controller = entity.getController();
 
     if (tag === GameTag.ZONE) {
+      if ((value === Zone.HAND || (value === Zone.PLAY && this.gameEventManager.isMulliganDone())) && !this.waitController) {
+        if (!this.gameEventManager.isMulliganDone()) {
+          previousZone = Zone.DECK;
+        }
+        if (!controller) {
+          entity.updateTag(GameTag.ZONE, previousZone);
+          this.waitController = {
+            id: id,
+            tag: tag,
+            value: value
+          };
+          return;
+        }
+      }
+
       switch (previousZone) {
 
         /**
@@ -38,6 +59,7 @@ class TagChangeHandler {
           switch (value) {
             case Zone.HAND:
               if (entity.isOwnedByPlayer() && entity.card_id) {
+                // console.log('drawing card', entity.card_id);
                 this.gameEventManager.playerCardDrawn(entity.card_id);
               }
               // console.log('Card added from deck to hand', entity);
@@ -94,8 +116,8 @@ class TagChangeHandler {
               // console.log('secret played from hand', entity);
               break;
             case Zone.DECK:
+              // console.log('mulliganed', entity);
               // player card mulliganed
-              // console.log('card mulliganed', entity);
               break;
           }
           break;
@@ -121,6 +143,17 @@ class TagChangeHandler {
           break;
 
       }
+    }
+    if (this.waitController && !recurse) {
+      let id = this.waitController.id;
+
+      this.tagChanged(
+        this.waitController.id,
+        this.waitController.tag,
+        this.waitController.value,
+        true
+      );
+      this.waitController = null;
     }
   }
   getTagValue(tag, rawValue) {

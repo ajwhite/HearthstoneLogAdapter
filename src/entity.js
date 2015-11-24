@@ -10,14 +10,23 @@ class Entity {
     }
     this.tags = {};
   }
+  getController() {
+    return this.tags[GameTag.CONTROLLER];
+  }
   isOwnedByPlayer() {
-    return this.tags[GameTag.CONTROLLER] === 1;
+    return this.getController() === 1;
   }
   isOwnedByOpponent() {
-    return this.tags[GameTag.CONTROLLER] === 2;
+    return this.getController() === 2;
   }
   updateTag(tag, value) {
+    if (tag === GameTag.MULLIGAN_STATE) {
+      console.log('mulligan', tag, value);
+    }
     this.tags[tag] = value;
+  }
+  getTag(tag) {
+    return this.tags[tag];
   }
   getZone() {
     return this.tags[GameTag.ZONE];

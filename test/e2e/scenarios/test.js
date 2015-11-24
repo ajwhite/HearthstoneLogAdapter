@@ -51,12 +51,29 @@ describe('E2E Test - Game 1', () => {
       handlers.handle(line);
     });
   });
+  it ('should identify the player mulligan card drawn', () => {
+    // console.log(gameEventManager.playerCardDrawn.getCalls().map(call => call.args));
+    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_002');
+    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_319');
+    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('LOE_029');
+    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_002');
+  })
   it ('should identify the opponent cards played', () => {
     expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_189');
     expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_189');
   });
   it ('should identify the player cards drawn', () => {
-    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_007');
-    expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('LOE_023');
+    var cardCallGroups = gameEventManager.playerCardDrawn.getCalls().map(call => call.args).reduce((map, args) => {
+      var cardId = args.pop();
+      if (!(cardId in map)) {
+        map[cardId] = [];
+      }
+      map[cardId].push(cardId);
+      return map;
+    }, {});
+    expect(cardCallGroups['FP1_007'].length).to.be.eql(1);
+    expect(cardCallGroups['LOE_023'].length).to.be.eql(1);
+    // expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_007');
+    // expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('LOE_023');
   });
 });
