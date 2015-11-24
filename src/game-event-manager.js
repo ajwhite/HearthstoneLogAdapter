@@ -1,6 +1,7 @@
 import Events from './events';
 import Cards from './cards';
-import Entity from './entity';
+import Entity from './entities/entity';
+import PlayerEntity from './entities/player';
 import GameTag from './constants/game-tag';
 import Mulligan from './constants/mulligan';
 
@@ -59,17 +60,30 @@ class GameEventManager {
     return this.entities[id];
   }
   getPlayerEntity() {
-    return Object.keys(this.entities).map(key => {
-      return this.entities[key];
-    }).find(entity => {
+    return this.getActors().find(entity => {
       return entity.getTag(GameTag.PLAYER_ID) === 1;
     });
   }
   getOpponentEntity() {
+    return this.getActors().find(entity=> {
+      return entity.getTag(GameTag.PLAYER_ID) === 2;
+    });
+  }
+  getActors() {
     return Object.keys(this.entities).map(key => {
       return this.entities[key];
-    }).find(entity=> {
-      return entity.getTag(GameTag.PLAYER_ID) === 2;
+    }).filter(entity => {
+      return entity instanceof PlayerEntity;
+    })
+  }
+  getActor(playerId) {
+    return this.getActors().find(actor => {
+      return actor.getTag(GameTag.PLAYER_ID) === playerId;
+    });
+  }
+  getActorByName(name) {
+    return this.getActors().find(actor => {
+      return actor.name === name;
     });
   }
   isMulliganDone() {

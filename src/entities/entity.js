@@ -1,5 +1,5 @@
 'use strict';
-import GameTag from './constants/game-tag';
+import GameTag from '../constants/game-tag';
 
 class Entity {
   constructor (arg) {

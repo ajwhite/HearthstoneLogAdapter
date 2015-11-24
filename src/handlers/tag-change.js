@@ -22,14 +22,6 @@ class TagChangeHandler {
       entity = this.gameEventManager.addEntityById(id);
     }
 
-    if (tag === GameTag.ZONE) {
-      // console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
-    }
-    if (tag === 'MULLIGAN_STATE') {
-      console.log('mulligan state changed', value);
-    }
-
-
     previousZone = entity.getZone();
     entity.updateTag(tag, value);
     controller = entity.getController();

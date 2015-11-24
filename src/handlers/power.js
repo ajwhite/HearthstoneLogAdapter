@@ -1,6 +1,7 @@
 'use strict';
 import Handler from './handler';
-import Entity from '../entity';
+import Entity from '../entities/entity';
+import PlayerEntity from '../entities/player';
 import TagChangeHandler from './tag-change';
 import GameTag from '../constants/game-tag';
 
@@ -56,7 +57,7 @@ class PowerHandler extends Handler {
       },
       {
         pattern: /Player EntityID=(\d+) PlayerID=(\d+) GameAccountId=(.+)/,
-        handle: this.onGameEntity.bind(this)
+        handle: this.onPlayerEntity.bind(this)
       },
       {
         pattern: /TAG_CHANGE Entity=([\w\s]+\w) tag=PLAYER_ID value=(\d)/,
@@ -94,17 +95,24 @@ class PowerHandler extends Handler {
     this.gameEventManager.safeAddEntity(id);
     this.currentEntity = id;
   }
-  onPlayerEntity(id) {
-    this.gameEventManager.safeAddEntity(id);
-    this.currentEntity = id;
+  onPlayerEntity(entityId, playerId) {
+    var actor = new PlayerEntity(parseInt(entityId), parseInt(playerId));
+    this.gameEventManager.entities[actor.id] = actor;
+    this.currentEntity = actor.id;
   }
-  onPlayerName(name, player) {
-    // console.log('playername', name, player);
+  onPlayerName(name, playerId) {
+    var actor = this.gameEventManager.getActor(parseInt(playerId));
+    if (actor) {
+      actor.setName(name);
+    }
   }
   onTagChange(rawEntity, tag, value) {
     var parsedEntity = parseEntity(rawEntity);
     if (parsedEntity && parsedEntity.id) {
       this.tagChangeHandler.tagChanged(parsedEntity.id, tag, value);
+    } else if (this.gameEventManager.getActorByName(rawEntity)) {
+      let actor = this.gameEventManager.getActorByName(rawEntity);
+      this.tagChangeHandler.tagChanged(actor.id, tag, value);
     }
   }
   onCurrentEntityTagChange(tag, value) {
