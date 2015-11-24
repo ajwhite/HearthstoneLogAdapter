@@ -21,7 +21,7 @@ class TagChangeHandler {
     }
 
     if (tag === GameTag.ZONE) {
-      console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
+      // console.log('zone changed from', entity.getZone(), 'to', value, 'for', id, entity.card_id);
     }
 
 
@@ -40,7 +40,7 @@ class TagChangeHandler {
               if (entity.isOwnedByPlayer() && entity.card_id) {
                 this.gameEventManager.playerCardDrawn(entity.card_id);
               }
-              console.log('Card added from deck to hand', entity);
+              // console.log('Card added from deck to hand', entity);
               // Deck -> Hand
               break;
             case Zone.REMOVEDFROMGAME:
@@ -52,18 +52,18 @@ class TagChangeHandler {
               if (entity.isOwnedByOpponent() && entity.card_id) {
                 this.gameEventManager.opponentCardPlayed(entity.card_id);
               }
-              console.log('card discard from deck to graveyard', entity);
+              // console.log('card discard from deck to graveyard', entity);
               break;
             case Zone.PLAY:
               // card played
               if (entity.isOwnedByOpponent() && entity.card_id) {
                 this.gameEventManager.opponentCardPlayed(entity.card_id);
               }
-              console.log('Card played from deck', entity);
+              // console.log('Card played from deck', entity);
               break;
             case Zone.SECRET:
               // card played
-              console.log('secret played from deck', entity);
+              // console.log('secret played from deck', entity);
               break;
           }
           break;
@@ -79,7 +79,7 @@ class TagChangeHandler {
               if (entity.isOwnedByOpponent() && entity.card_id) {
                 this.gameEventManager.opponentCardPlayed(entity.card_id);
               }
-              console.log('card played from hand', entity);
+              // console.log('card played from hand', entity);
               break;
             case Zone.REMOVEDFROMGAME:
             case Zone.GRAVEYARD:
@@ -87,15 +87,15 @@ class TagChangeHandler {
               if (entity.isOwnedByOpponent() && entity.card_id) {
                 this.gameEventManager.opponentCardPlayed(entity.card_id);
               }
-              console.log('card discarded from hand', entity);
+              // console.log('card discarded from hand', entity);
               break;
             case Zone.SECRET:
               // player plays a secret
-              console.log('secret played from hand', entity);
+              // console.log('secret played from hand', entity);
               break;
             case Zone.DECK:
               // player card mulliganed
-              console.log('card mulliganed', entity);
+              // console.log('card mulliganed', entity);
               break;
           }
           break;
@@ -107,15 +107,15 @@ class TagChangeHandler {
           switch (value) {
             case Zone.HAND:
               // card returned to hand
-              console.log('card in play returned to hand', entity);
+              // console.log('card in play returned to hand', entity);
               break;
             case Zone.DECK:
               // card returned to deck
-              console.log('card in play returned to deck', entity);
+              // console.log('card in play returned to deck', entity);
               break;
             case Zone.GRAVEYARD:
               // card died
-              console.log('card in play killed', entity);
+              // console.log('card in play killed', entity);
               break;
           }
           break;

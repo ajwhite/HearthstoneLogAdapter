@@ -47,7 +47,7 @@ describe('E2E Test - Game 1', () => {
     gameEventManager.opponentHero = sinon.stub(gameEventManager, 'opponentHero');
     handlers = new Handlers(gameEventManager);
     file = fs.readFileSync(path.join(__dirname, '/game1.txt'), 'utf8');
-    file.toString().split('\n').forEach(line => {
+    file.toString().split(/\n/g).forEach(line => {
       handlers.handle(line);
     });
   });

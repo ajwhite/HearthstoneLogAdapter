@@ -5,11 +5,11 @@ class Handler {
   constructor(name, filters) {
     this.name = name;
     this.filters = filters;
-    this.matcher = new RegExp(`(\\[${this.name}\\])`, 'g');
+    this.matcher = new RegExp(`(\\[${this.name}\\])`);
   }
 
   matches(line) {
-    return this.matcher.test(line.toString());
+    return this.matcher.test(line);
   }
 
   handle(line) {

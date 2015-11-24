@@ -99,7 +99,7 @@ class PowerHandler extends Handler {
     this.currentEntity = id;
   }
   onPlayerName(name, player) {
-    console.log('playername', name, player);
+    // console.log('playername', name, player);
   }
   onTagChange(rawEntity, tag, value) {
     var parsedEntity = parseEntity(rawEntity);

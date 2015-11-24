@@ -36,12 +36,12 @@ class GameEventManager {
   }
   addEntityById(id) {
     this.entities[id] = new Entity(id);
-    console.log('adding entity ID', id);
+    // console.log('adding entity ID', id);
     return this.entities[id];
   }
   addEntity(entity) {
     this.entities[entity.id] = entity;
-    console.log('adding entity object', entity);
+    // console.log('adding entity object', entity);
     return this.entities[entity.id];
   }
   hasEntity(id) {
