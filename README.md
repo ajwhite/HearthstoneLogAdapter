@@ -6,14 +6,19 @@ This is a library that allows you to access live events from your Hearthstone cl
 npm install hearthstone-log-adapter
 ```
 
-### Examples
+### Example Usage
 
-Starting the log adapter:
+Include the adapter in your project
 ```js
 var HearthstoneLogAdapter = require('hearthstone-log-adapter');
+```
+
+#### Receiving game events
+```js
 var logAdapter = new HearthstoneLogAdapter('/path/to/hearthstone/log/directory');
+
+// the stream will emit events that occur real-time in the game
 logAdapter.start().then(function (stream) {
-  // the stream will emit events that occur real-time in the game
   stream.on('playerCardDrawn', function (card, player) {
     // `card` is the model of the card the `player` drew
   });
@@ -27,4 +32,18 @@ logAdapter.start().then(function (stream) {
     // game ended, `winner` and `loser` are player models
   });
 });
+```
+
+#### Accessing the game API directly
+```js
+var logAdapter = new HearthstoneLogAdapter('/path/to/hearthstone/log/directory');
+logAdapter.start();
+
+//.. later on
+var gameInstance = logAdapter.getGameInstance();
+gameInstance.getPlayerCards();
+gameInstance.getOpponentCards();
+gameInstance.getPlayer();
+gameInstance.getOpponent();
+gameInstance.getTurn();
 ```
