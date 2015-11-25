@@ -4,8 +4,8 @@ import path from 'path';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import GameEventManager from '../../../src/game-event-manager';
-import Handlers from '../../../src/handlers';
+import GameEventManager from '../../../../src/game-event-manager';
+import Handlers from '../../../../src/handlers';
 
 /**
  * Game 1 Scenario

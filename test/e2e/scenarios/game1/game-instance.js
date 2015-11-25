@@ -5,11 +5,11 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import EventEmitter from 'events';
-import GameEventManager from '../../../src/game-event-manager';
-import Handlers from '../../../src/handlers';
-import Game from '../../../src/game';
-import PlayerEntity from '../../../src/entities/player';
-import GameTag from '../../../src/constants/game-tag';
+import GameEventManager from '../../../../src/game-event-manager';
+import Handlers from '../../../../src/handlers';
+import Game from '../../../../src/game';
+import PlayerEntity from '../../../../src/entities/player';
+import GameTag from '../../../../src/constants/game-tag';
 
 
 /**
