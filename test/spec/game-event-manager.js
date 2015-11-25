@@ -43,9 +43,9 @@ describe('GameEventManager', () => {
       expect(adapter.emit).not.to.have.been.called;
     });
   });
-  describe('#gameStarted', () => {
+  describe('#gameStart', () => {
     it ('should emit that the game was started', () => {
-      gameEventManager.gameStarted();
+      gameEventManager.gameStart();
       expect(adapter.emit).to.have.been.calledWith(Events.GAME_STARTED);
     });
   });
