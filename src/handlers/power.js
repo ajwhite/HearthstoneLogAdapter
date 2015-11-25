@@ -48,7 +48,7 @@ class PowerHandler extends Handler {
       {
         pattern: /(CREATE_GAME)/i,
         handle: () => {
-          gameEventManager.gameStarted();
+          gameEventManager.gameStart();
         }
       },
       {
@@ -94,6 +94,7 @@ class PowerHandler extends Handler {
   onGameEntity(id) {
     this.gameEventManager.safeAddEntity(id);
     this.currentEntity = id;
+    this.gameEventManager.gameStart();
   }
   onPlayerEntity(entityId, playerId) {
     var actor = new PlayerEntity(parseInt(entityId), parseInt(playerId));

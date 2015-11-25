@@ -1,6 +1,7 @@
 'use strict';
 import GameTag from '../constants/game-tag';
 import Zone from '../constants/zone';
+import PlayState from '../constants/play-state';
 
 class TagChangeHandler {
   constructor(gameEventManager) {
@@ -28,6 +29,15 @@ class TagChangeHandler {
     if (tag === GameTag.ZONE) {
       if (!this.zoneChangeHandler(entity, value, previousZone)) {
         return;
+      }
+    } else if (tag === GameTag.PLAYSTATE) {
+      if (value === PlayState.CONCEDED) {
+        console.log('conceded');
+      }
+      console.log('play state changed', value);
+    } else if (tag === GameTag.CURRENT_PLAYER) {
+      if (value === 1) {
+        this.gameEventManager.turnChange(entity);
       }
     }
     if (this.waitController && !recurse) {

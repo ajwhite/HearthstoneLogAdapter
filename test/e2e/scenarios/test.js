@@ -42,7 +42,7 @@ describe('E2E Test - Game 1', () => {
     gameEventManager = new GameEventManager();
     gameEventManager.opponentCardPlayed = sinon.stub(gameEventManager, 'opponentCardPlayed');
     gameEventManager.playerCardDrawn = sinon.stub(gameEventManager, 'playerCardDrawn');
-    gameEventManager.gameStarted = sinon.stub(gameEventManager, 'gameStarted');
+    gameEventManager.gameStart = sinon.stub(gameEventManager, 'gameStart');
     gameEventManager.playerHero = sinon.stub(gameEventManager, 'playerHero');
     gameEventManager.opponentHero = sinon.stub(gameEventManager, 'opponentHero');
     handlers = new Handlers(gameEventManager);
@@ -51,8 +51,10 @@ describe('E2E Test - Game 1', () => {
       handlers.handle(line);
     });
   });
+  it ('should indicate the game has started', () => {
+    expect(gameEventManager.gameStart).to.have.been.caled;
+  })
   it ('should identify the player mulligan card drawn', () => {
-    // console.log(gameEventManager.playerCardDrawn.getCalls().map(call => call.args));
     expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_002');
     expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_319');
     expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('LOE_029');
@@ -73,7 +75,5 @@ describe('E2E Test - Game 1', () => {
     }, {});
     expect(cardCallGroups['FP1_007'].length).to.be.eql(1);
     expect(cardCallGroups['LOE_023'].length).to.be.eql(1);
-    // expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_007');
-    // expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('LOE_023');
   });
 });
