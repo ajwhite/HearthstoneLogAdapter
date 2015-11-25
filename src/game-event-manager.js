@@ -4,11 +4,14 @@ import Entity from './entities/entity';
 import PlayerEntity from './entities/player';
 import GameTag from './constants/game-tag';
 import Mulligan from './constants/mulligan';
+import PlayState from './constants/play-state';
 
 class GameEventManager {
   constructor(adapter) {
     this.adapter = adapter;
     this.entities = {};
+    this.currentActor = null;
+    this.playState = PlayState.INVALID;
   }
   opponentCardPlayed(cardId) {
     var card = Cards.getById(cardId);
@@ -22,8 +25,11 @@ class GameEventManager {
       this.adapter.emit(Events.PLAYER_CARD, Object.assign({}, card));
     }
   }
-  gameStarted() {
-    this.adapter.emit(Events.GAME_STARTED);
+  gameStart() {
+    if (this.playState !== PlayState.PLAYING) {
+      this.playState = PlayState.PLAYING;
+      this.adapter.emit(Events.GAME_STARTED);
+    }
   }
   playerHero(cardId) {
     var card = Cards.getById(cardId);
@@ -39,12 +45,10 @@ class GameEventManager {
   }
   addEntityById(id) {
     this.entities[id] = new Entity(id);
-    // console.log('adding entity ID', id);
     return this.entities[id];
   }
   addEntity(entity) {
     this.entities[entity.id] = entity;
-    // console.log('adding entity object', entity);
     return this.entities[entity.id];
   }
   hasEntity(id) {
@@ -85,6 +89,16 @@ class GameEventManager {
     return this.getActors().find(actor => {
       return actor.name === name;
     });
+  }
+  turnChange(actor) {
+    if (!this.currentActor || this.currentActor.id !== actor.id) {
+      this.currentActor = actor;
+    }
+  }
+  setPlayState(playState) {
+    if (this.playState !== playState) {
+      this.playState = playState;
+    }
   }
   isMulliganDone() {
     var player = this.getPlayerEntity();

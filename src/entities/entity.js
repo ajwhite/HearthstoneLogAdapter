@@ -1,5 +1,6 @@
 'use strict';
 import GameTag from '../constants/game-tag';
+import CardType from '../constants/card-type';
 
 class Entity {
   constructor (arg) {
@@ -20,9 +21,6 @@ class Entity {
     return this.getController() === 2;
   }
   updateTag(tag, value) {
-    if (tag === GameTag.MULLIGAN_STATE) {
-      console.log('mulligan', tag, value);
-    }
     this.tags[tag] = value;
   }
   getTag(tag) {
@@ -30,6 +28,17 @@ class Entity {
   }
   getZone() {
     return this.tags[GameTag.ZONE];
+  }
+  isCard() {
+    var cardType = this.getTag(GameTag.CARDTYPE);
+    return [
+      CardType.MINION,
+      CardType.WEAPON,
+      CardType.ENHANCEMENT,
+      CardType.WEAPON,
+      CardType.ITEM,
+      CardType.SPELL
+    ].indexOf(cardType) > -1;
   }
 }
 

@@ -26,7 +26,7 @@ describe('Handlers: Power', () => {
   describe('event handlers', function () {
     it ('should detect ranked mode', function () {
       powerHandler.handle('[Power] CREATE_GAME');
-      expect(gameEventManager.gameStarted).to.have.been.called;
+      expect(gameEventManager.gameStart).to.have.been.called;
     });
   });
 });
