@@ -160,6 +160,29 @@ class TagChangeHandler {
         }
         break;
 
+      case Zone.SECRET:
+        break;
+
+      case Zone.GRAVEYARD:
+      case Zone.SETASIDE:
+      case Zone.CREATED:
+      case Zone.INVALID:
+      case Zone.REMOVEDFROMGAME:
+        switch (value) {
+          case Zone.PLAY:
+            // ... no idea
+            break;
+          case Zone.DECK:
+            // JOUST
+            break;
+          case Zone.HAND:
+            if (entity.isOwnedByPlayer()) {
+              this.gameEventManager.playerCardDrawn(entity.card_id);
+            }
+            break;
+        }
+        break;
+
     }
     return true;
   }
