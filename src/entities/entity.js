@@ -20,9 +20,6 @@ class Entity {
     return this.getController() === 2;
   }
   updateTag(tag, value) {
-    if (tag === GameTag.MULLIGAN_STATE) {
-      console.log('mulligan', tag, value);
-    }
     this.tags[tag] = value;
   }
   getTag(tag) {
