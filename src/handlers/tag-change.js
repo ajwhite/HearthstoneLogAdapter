@@ -24,116 +24,10 @@ class TagChangeHandler {
 
     previousZone = entity.getZone();
     entity.updateTag(tag, value);
-    controller = entity.getController();
 
     if (tag === GameTag.ZONE) {
-      if ((value === Zone.HAND || (value === Zone.PLAY && this.gameEventManager.isMulliganDone())) && !this.waitController) {
-        if (!this.gameEventManager.isMulliganDone()) {
-          previousZone = Zone.DECK;
-        }
-        if (!controller) {
-          entity.updateTag(GameTag.ZONE, previousZone);
-          this.waitController = {
-            id: id,
-            tag: tag,
-            value: value
-          };
-          return;
-        }
-      }
-
-      switch (previousZone) {
-
-        /**
-         * When a card was last in the deck
-         */
-        case Zone.DECK:
-          switch (value) {
-            case Zone.HAND:
-              if (entity.isOwnedByPlayer() && entity.card_id) {
-                // console.log('drawing card', entity.card_id);
-                this.gameEventManager.playerCardDrawn(entity.card_id);
-              }
-              // console.log('Card added from deck to hand', entity);
-              // Deck -> Hand
-              break;
-            case Zone.REMOVEDFROMGAME:
-            case Zone.SETASIDE:
-              console.log('Joust', entity);
-              break;
-            case Zone.GRAVEYARD:
-              // deck discard
-              if (entity.isOwnedByOpponent() && entity.card_id) {
-                this.gameEventManager.opponentCardPlayed(entity.card_id);
-              }
-              // console.log('card discard from deck to graveyard', entity);
-              break;
-            case Zone.PLAY:
-              // card played
-              if (entity.isOwnedByOpponent() && entity.card_id) {
-                this.gameEventManager.opponentCardPlayed(entity.card_id);
-              }
-              // console.log('Card played from deck', entity);
-              break;
-            case Zone.SECRET:
-              // card played
-              // console.log('secret played from deck', entity);
-              break;
-          }
-          break;
-
-
-        /**
-         * When a card was last in the hand
-         */
-        case Zone.HAND:
-          switch (value) {
-            case Zone.PLAY:
-              // card played
-              if (entity.isOwnedByOpponent() && entity.card_id) {
-                this.gameEventManager.opponentCardPlayed(entity.card_id);
-              }
-              // console.log('card played from hand', entity);
-              break;
-            case Zone.REMOVEDFROMGAME:
-            case Zone.GRAVEYARD:
-              // card discarded
-              if (entity.isOwnedByOpponent() && entity.card_id) {
-                this.gameEventManager.opponentCardPlayed(entity.card_id);
-              }
-              // console.log('card discarded from hand', entity);
-              break;
-            case Zone.SECRET:
-              // player plays a secret
-              // console.log('secret played from hand', entity);
-              break;
-            case Zone.DECK:
-              // console.log('mulliganed', entity);
-              // player card mulliganed
-              break;
-          }
-          break;
-
-        /**
-         * When a card was last on the board
-         */
-        case Zone.PLAY:
-          switch (value) {
-            case Zone.HAND:
-              // card returned to hand
-              // console.log('card in play returned to hand', entity);
-              break;
-            case Zone.DECK:
-              // card returned to deck
-              // console.log('card in play returned to deck', entity);
-              break;
-            case Zone.GRAVEYARD:
-              // card died
-              // console.log('card in play killed', entity);
-              break;
-          }
-          break;
-
+      if (!this.zoneChangeHandler(entity, value, previousZone)) {
+        return;
       }
     }
     if (this.waitController && !recurse) {
@@ -147,6 +41,118 @@ class TagChangeHandler {
       );
       this.waitController = null;
     }
+  }
+  zoneChangeHandler(entity, value, previousZone) {
+    var controller = entity.getController();
+    if ((value === Zone.HAND || (value === Zone.PLAY && this.gameEventManager.isMulliganDone())) && !this.waitController) {
+      if (!this.gameEventManager.isMulliganDone()) {
+        previousZone = Zone.DECK;
+      }
+      if (!controller) {
+        entity.updateTag(GameTag.ZONE, previousZone);
+        this.waitController = {
+          id: entity.id,
+          tag: GameTag.ZONE,
+          value: value
+        };
+        return false;
+      }
+    }
+
+    switch (previousZone) {
+
+      /**
+       * When a card was last in the deck
+       */
+      case Zone.DECK:
+        switch (value) {
+          case Zone.HAND:
+            if (entity.isOwnedByPlayer() && entity.card_id) {
+              // console.log('drawing card', entity.card_id);
+              this.gameEventManager.playerCardDrawn(entity.card_id);
+            }
+            // console.log('Card added from deck to hand', entity);
+            // Deck -> Hand
+            break;
+          case Zone.REMOVEDFROMGAME:
+          case Zone.SETASIDE:
+            console.log('Joust', entity);
+            break;
+          case Zone.GRAVEYARD:
+            // deck discard
+            if (entity.isOwnedByOpponent() && entity.card_id) {
+              this.gameEventManager.opponentCardPlayed(entity.card_id);
+            }
+            // console.log('card discard from deck to graveyard', entity);
+            break;
+          case Zone.PLAY:
+            // card played
+            if (entity.isOwnedByOpponent() && entity.card_id) {
+              this.gameEventManager.opponentCardPlayed(entity.card_id);
+            }
+            // console.log('Card played from deck', entity);
+            break;
+          case Zone.SECRET:
+            // card played
+            // console.log('secret played from deck', entity);
+            break;
+        }
+        break;
+
+
+      /**
+       * When a card was last in the hand
+       */
+      case Zone.HAND:
+        switch (value) {
+          case Zone.PLAY:
+            // card played
+            if (entity.isOwnedByOpponent() && entity.card_id) {
+              this.gameEventManager.opponentCardPlayed(entity.card_id);
+            }
+            // console.log('card played from hand', entity);
+            break;
+          case Zone.REMOVEDFROMGAME:
+          case Zone.GRAVEYARD:
+            // card discarded
+            if (entity.isOwnedByOpponent() && entity.card_id) {
+              this.gameEventManager.opponentCardPlayed(entity.card_id);
+            }
+            // console.log('card discarded from hand', entity);
+            break;
+          case Zone.SECRET:
+            // player plays a secret
+            // console.log('secret played from hand', entity);
+            break;
+          case Zone.DECK:
+            // console.log('mulliganed', entity);
+            // player card mulliganed
+            break;
+        }
+        break;
+
+      /**
+       * When a card was last on the board
+       */
+      case Zone.PLAY:
+        switch (value) {
+          case Zone.HAND:
+            // card returned to hand
+            // console.log('card in play returned to hand', entity);
+            break;
+          case Zone.DECK:
+            // card returned to deck
+            // console.log('card in play returned to deck', entity);
+            break;
+          case Zone.GRAVEYARD:
+            // card died
+            // console.log('card in play killed', entity);
+            break;
+        }
+        break;
+
+    }
+    return true;
   }
   getTagValue(tag, rawValue) {
     if (tag === GameTag.ZONE) {
