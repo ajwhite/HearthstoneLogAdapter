@@ -98,7 +98,6 @@ class GameEventManager {
   setPlayState(playState) {
     if (this.playState !== playState) {
       this.playState = playState;
-      console.log('play state', playState);
     }
   }
   isMulliganDone() {

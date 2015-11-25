@@ -32,9 +32,8 @@ class TagChangeHandler {
       }
     } else if (tag === GameTag.PLAYSTATE) {
       if (value === PlayState.CONCEDED) {
-        console.log('conceded');
+        this.gameEventManager.setPlayState(PlayState.CONCEDED);
       }
-      console.log('play state changed', value);
     } else if (tag === GameTag.CURRENT_PLAYER) {
       if (value === 1) {
         this.gameEventManager.turnChange(entity);

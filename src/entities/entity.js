@@ -1,5 +1,6 @@
 'use strict';
 import GameTag from '../constants/game-tag';
+import CardType from '../constants/card-type';
 
 class Entity {
   constructor (arg) {
@@ -27,6 +28,17 @@ class Entity {
   }
   getZone() {
     return this.tags[GameTag.ZONE];
+  }
+  isCard() {
+    var cardType = this.getTag(GameTag.CARDTYPE);
+    return [
+      CardType.MINION,
+      CardType.WEAPON,
+      CardType.ENHANCEMENT,
+      CardType.WEAPON,
+      CardType.ITEM,
+      CardType.SPELL
+    ].indexOf(cardType) > -1;
   }
 }
 

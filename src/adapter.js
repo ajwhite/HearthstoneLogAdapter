@@ -5,6 +5,7 @@ import EventEmitter from 'events';
 import fs from 'fs';
 import path from 'path';
 import GameEventManager from './game-event-manager';
+import GameInstance from './game';
 import Handlers from './handlers';
 import Events from './events';
 
@@ -33,6 +34,9 @@ class LogAdapter extends EventEmitter {
         });
       });
     });
+  }
+  getGameInstance() {
+    return new GameInstance(this.gameEventManager);
   }
 }
 
