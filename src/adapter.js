@@ -4,6 +4,7 @@ import child_process from 'child_process';
 import EventEmitter from 'events';
 import fs from 'fs';
 import path from 'path';
+import chokidar from 'chokidar';
 import GameEventManager from './game-event-manager';
 import GameInstance from './game';
 import Handlers from './handlers';
@@ -18,20 +19,28 @@ class LogAdapter extends EventEmitter {
     this.logDirectory = logDirectory;
     this.gameEventManager = new GameEventManager(this);
     this.handlers = new Handlers(this.gameEventManager);
-    this.stream = null;
+    this.tailProcess = null;
+    this.directoryWatcher = null;
   }
   start() {
     return readDir(this.logDirectory).then(files => {
       var file = files.pop();
-      var child = spawn('tail', ['-f', path.join(this.logDirectory, file)]);
-      return child.stdout;
-    }).then(stream => {
-      this.stream = stream;
-      this.stream.on('data', data => {
-        var lines = data.toString().split('\n');
-        lines.forEach(line => {
-          this.handlers.handle(line);
-        });
+      this.startTailProcess(path.join(this.logDirectory, file));
+      if (!this.directoryWatcher) {
+        this.directoryWatcher = chokidar.watch(this.logDirectory, {ignoreInitial: true});
+        this.directoryWatcher.on('add', path => this.startTailProcess(path));
+      }
+    });
+  }
+  startTailProcess(logfile) {
+    if (this.tailProcess) {
+      this.tailProcess.kill('SIGHUP');
+    }
+    this.tailProcess = spawn('tail', ['-f', logfile]);
+    this.tailProcess.stdout.on('data', data => {
+      var lines = data.toString().split('\n');
+      lines.forEach(line => {
+        this.handlers.handle(line);
       });
     });
   }
