@@ -6,6 +6,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import GameEventManager from '../../../../src/game-event-manager';
 import Handlers from '../../../../src/handlers';
+import PlayState from '../../../../src/constants/play-state';
 
 /**
  * Game 1 Scenario
@@ -81,6 +82,7 @@ describe('E2E Test - Game 2', () => {
     gameEventManager.gameStart = sinon.stub(gameEventManager, 'gameStart');
     gameEventManager.playerHero = sinon.stub(gameEventManager, 'playerHero');
     gameEventManager.opponentHero = sinon.stub(gameEventManager, 'opponentHero');
+    gameEventManager.gameEnd = sinon.stub(gameEventManager, 'gameEnd');
     handlers = new Handlers(gameEventManager);
     file = fs.readFileSync(path.join(__dirname, '/game.txt'), 'utf8');
     file.toString().split(/\n/g).forEach(line => {
@@ -109,7 +111,10 @@ describe('E2E Test - Game 2', () => {
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('CS2_188');
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_093');
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_316');
-    })
+    });
+    it ('should indicate the game has ended', () => {
+      expect(gameEventManager.gameEnd).to.have.been.calledWith(PlayState.WON);
+    });
     // it ('should identify the opponent cards played', () => {
     //   expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_189');
     //   expect(gameEventManager.opponentCardPlayed).to.have.been.calledWith('CS2_189');

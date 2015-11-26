@@ -31,6 +31,9 @@ class GameEventManager {
       this.adapter.emit(Events.GAME_STARTED);
     }
   }
+  gameEnd(playState) {
+    this.adapter.emit(Events.GAME_ENDED, {outcome: playState});
+  }
   playerHero(cardId) {
     var card = Cards.getById(cardId);
     if (card) {

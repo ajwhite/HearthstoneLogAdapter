@@ -31,8 +31,12 @@ class TagChangeHandler {
         return;
       }
     } else if (tag === GameTag.PLAYSTATE) {
-      if (value === PlayState.CONCEDED) {
-        this.gameEventManager.setPlayState(PlayState.CONCEDED);
+      switch (value) {
+        case PlayState.CONCEDED:
+        case PlayState.LOST:
+        case PlayState.WON:
+        case PlayState.TIED:
+          this.gameEventManager.gameEnd(value);
       }
     } else if (tag === GameTag.CURRENT_PLAYER) {
       if (value === 1) {
