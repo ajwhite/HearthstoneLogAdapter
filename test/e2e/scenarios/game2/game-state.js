@@ -91,14 +91,13 @@ describe('E2E Test - Game 2', () => {
     it ('should indicate the game has started', () => {
       expect(gameEventManager.gameStart).to.have.been.caled;
     });
-    it ('should identify the mulligan', () => {
-      // discarded during mulligan
-      expect(gameEventManager.playerCardDrawn).not.to.have.been.calledWith('EX1_310');
-      expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_316');
-      expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('CS2_065');
-      expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_007');
-
-    });
+    // it ('should identify the mulligan', () => {
+    //   // discarded during mulligan
+    //   expect(gameEventManager.playerCardDrawn).not.to.have.been.calledWith('EX1_310');
+    //   expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_316');
+    //   expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('CS2_065');
+    //   expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('FP1_007');
+    // });
     it ('should identify when the player has drawn cards', () => {
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('EX1_316');
       expect(gameEventManager.playerCardDrawn).to.have.been.calledWith('CS2_065');
